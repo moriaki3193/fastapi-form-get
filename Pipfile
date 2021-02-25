@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+aiofiles = "~=0.6.0"
+fastapi = "~=0.63.0"
+pydantic = "~=1.7.3"
+python-multipart = "~=0.0.5"
+
+[dev-packages]
+uvicorn = "~=0.13.4"
+
+[requires]
+python_version = "3.8"

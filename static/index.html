@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<head>
+  <title>FastAPI Form GET</title>
+</head>
+<body>
+  <h1>FastAPI Form GET</h1>
+  <form action="http://localhost:8005/v1/profit" method="get">
+    <div>
+      <label for="revenue">Revenue : </label>
+      <input name="revenue" id="revenue" type="number" min="0">
+    </div>
+    <div>
+      <label for="expense">Expense : </label>
+      <input name="expense" id="expense" type="number" min="0">
+    </div>
+    <div>
+      <button id="submit-button">Calculate Profit</button>
+    </div>
+    <div>
+      <p>Profit : <span id="profit"></span></p>
+    </div>
+  </form>
+  <script>
+    const button = document.getElementById('submit-button');
+
+    button.onclick = function(e) {
+      e.preventDefault();
+
+      const form = e.target.form;
+      const data = {
+        revenue: document.getElementById('revenue').value,
+        expense: document.getElementById('expense').value,
+      };
+
+      /* START send data */
+      const XHR = new XMLHttpRequest();
+
+      let urlEncodedData = "",
+          urlEncodedDataPairs = [],
+          name;
+
+      for (name in data) {
+        urlEncodedDataPairs.push(encodeURIComponent(name) + "=" + encodeURIComponent(data[name]));
+      }
+
+      urlEncodedData = urlEncodedDataPairs.join("&").replace(/%20/g, "+");
+
+      XHR.addEventListener("load", function(e) {
+        const profit = document.getElementById('profit');
+        const res = JSON.parse(e.target.response);
+
+        profit.textContent = res.profit;
+      })
+
+      XHR.addEventListener("error", function(e) {
+        console.error(e);
+      })
+
+      XHR.open(form.method, form.action + "?" + urlEncodedData);
+
+      XHR.setRequestHeader('accept', 'application/json');
+
+      XHR.send(urlEncodedData);
+    }
+  </script>
+</body>
